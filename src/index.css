@@ -1,0 +1,17 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Optional: drop your actual font files in /public/fonts and uncomment */
+/* 
+@font-face {
+  font-family: "Sofia Pro";
+  src: url("/fonts/SofiaPro.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+*/
+
+a { @apply text-white underline; } /* ensure links are white */
