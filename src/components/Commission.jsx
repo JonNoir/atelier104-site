@@ -13,10 +13,11 @@ export default function Commission() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    // save the form element BEFORE any await (React event pooling)
+    const formEl = e.currentTarget;
     setStatus('sending');
     setErr('');
 
-    // simple client-side guard
     if (!form.first || !form.last || !form.email) {
       setStatus('error');
       setErr('Please fill your first name, last name, and email.');
@@ -29,20 +30,17 @@ export default function Commission() {
       ua: (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : '',
     };
 
-    // timeout safety (Apps Script can be slow if cold)
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), 15000); // 15s
 
     try {
-      const r = await fetch(INTAKE_URL /* + '?x-secret=YOUR_SECRET' if you added one */, {
+      const r = await fetch(INTAKE_URL /* + '?x-secret=YOUR_SECRET' if used */, {
         method: 'POST',
-        // IMPORTANT: no headers so the browser doesn't preflight (CORS)
+        // no headers → avoids CORS preflight
         body: JSON.stringify(payload),
         signal: ctrl.signal,
       });
-      clearTimeout(t);
 
-      // Apps Script should return {"ok": true}
       const json = await r.json().catch(() => ({}));
       if (!r.ok || json.ok !== true) {
         throw new Error(json.error || `Submission failed (HTTP ${r.status})`);
@@ -50,12 +48,13 @@ export default function Commission() {
 
       setStatus('sent');
       setForm({ first: '', last: '', email: '', budget: '', brief: '' });
-      e.currentTarget.reset?.();
+      if (formEl && typeof formEl.reset === 'function') formEl.reset();
     } catch (error) {
-      clearTimeout(t);
       setStatus('error');
       setErr(error.name === 'AbortError' ? 'Request timed out, please try again.' : (error.message || 'Something went wrong'));
       console.error(error);
+    } finally {
+      clearTimeout(t);
     }
   };
 
