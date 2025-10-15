@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CONTACT } from '../data/siteData';
 
 // TIP: move this into an env var when you can (Vite: import.meta.env.VITE_INTAKE_URL)
-const INTAKE_URL = 'https://script.google.com/macros/s/AKfycbz47DFcgSazV4sQc20HjGse6TWPOwZMN4cE3awKE-3m1H8SW4YnkwkmHabvezvqEBiddg/exec';
+const INTAKE_URL = 'https://script.google.com/macros/s/16kTN1ir4kDguIcmsT8PGXPFPikRis5GDS1mZJUhfWBi8aKz16Xc6qcRi/exec';
 
 export default function Commission() {
   const [form, setForm] = useState({ first: '', last: '', email: '', budget: '', brief: '' });
