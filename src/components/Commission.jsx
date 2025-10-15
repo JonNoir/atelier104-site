@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CONTACT } from '../data/siteData';
 
 // TIP: move this into an env var when you can (Vite: import.meta.env.VITE_INTAKE_URL)
-const INTAKE_URL ='https://script.google.com/macros/s/AKfycbyEhrrzumYNNxWYIwMsUGz5kEQ8S-eBXP39axNCDaMRI-OSZA9Qlae-j1AMpwjWBGomiQ/exec ';
+const INTAKE_URL = 'https://script.google.com/macros/s/AKfycbyEhrrzumYNNxWYIwMsUGz5kEQ8S-eBXP39axNCDaMRI-OSZA9Qlae-j1AMpwjWBGomiQ/exec';
 
 export default function Commission() {
   const [form, setForm] = useState({ first: '', last: '', email: '', budget: '', brief: '' });
@@ -34,9 +34,9 @@ export default function Commission() {
     const t = setTimeout(() => ctrl.abort(), 15000); // 15s
 
     try {
-      const r = await fetch(INTAKE_URL, {
+      const r = await fetch(INTAKE_URL /* + '?x-secret=YOUR_SECRET' if you added one */, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // IMPORTANT: no headers so the browser doesn't preflight (CORS)
         body: JSON.stringify(payload),
         signal: ctrl.signal,
       });
